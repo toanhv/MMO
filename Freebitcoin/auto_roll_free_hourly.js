@@ -33,22 +33,15 @@ function try_roll(){
 			RedeemRPProduct('free_points_1');
     }
     if(z==null && parseInt(myRP[0].innerText.replace(/,/g, '')) >= 4400){
-		setTimeout(function(){
-            RedeemRPProduct('fp_bonus_1000');
-        }, 2000); 
+		RedeemRPProduct('fp_bonus_1000');
     }
 	if(z==null && parseInt(myRP[0].innerText.replace(/,/g, '')) >= 3000){
-		setTimeout(function(){
-            RedeemRPProduct('fp_bonus_500');
-        }, 2000); 
+		RedeemRPProduct('fp_bonus_500');
     }
     if(x && x.style["display"] != "none"){
         setTimeout(function(){
             x.click();
-        }, 3000);    
-		setTimeout(function(){
-            //GenerateMainDepositAddress();
-        }, 5000); 
+        }, 3000); 
     }
 }
 
