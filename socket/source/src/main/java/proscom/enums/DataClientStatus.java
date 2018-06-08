@@ -9,16 +9,16 @@
 package proscom.enums;
 
 public enum DataClientStatus {
-	
-	NOT_BEEN_SENT(0), SENT(1), CLIENT_CONFIRM_OK(3), CONNECTION_ERROR(4);
-	
-	private int dataClientType;
-	
-	private DataClientStatus(int dataClientType) {
-		this.dataClientType = dataClientType;
-	}
-	
-	public int getValue() {
-		return dataClientType;
-	}
+
+    NOT_BEEN_SENT(0), SENT(1), CLIENT_CONFIRM_OK(3), CONNECTION_ERROR(4);
+
+    private int dataClientType;
+
+    private DataClientStatus(int dataClientType) {
+        this.dataClientType = dataClientType;
+    }
+
+    public int getValue() {
+        return dataClientType;
+    }
 }

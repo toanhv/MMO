@@ -31,74 +31,74 @@ import proscom.exception.AppConfigException;
  * <p>
  * Copyright: Copyright (c) by LAPTRINH.VN 2016
  * </p>
- * 
+ *
  * @author LAPTRINH.VN
  * @version 0.1
  */
 public class AppConfig {
-	
-	private static final String CONF_PATH = "conf";
-	private static final String CONF_FILE = "app.properties";
-	private static final String BONECP_CONF_FILE = "bonecp-config.properties";
 
-	private static PropertiesConfiguration propertiesConfiguration = null;
+    private static final String CONF_PATH = "conf";
+    private static final String CONF_FILE = "app.properties";
+    private static final String BONECP_CONF_FILE = "bonecp-config.properties";
 
-	/**
-	 * Gets {@link PropertiesConfiguration} of application.
-	 * 
-	 * @return {@link PropertiesConfiguration} object.
-	 * @throws AppConfigException
-	 */
-	public static synchronized PropertiesConfiguration getPropertiesConfiguration() throws AppConfigException {
-		if (propertiesConfiguration == null) {
-			try {
-				String configFile = getLocation(CONF_PATH) + "/" + CONF_FILE;
+    private static PropertiesConfiguration propertiesConfiguration = null;
 
-				propertiesConfiguration = new PropertiesConfiguration();
-				// auto reload config when content is changed
-				propertiesConfiguration.setReloadingStrategy(new FileChangedReloadingStrategy());
+    /**
+     * Gets {@link PropertiesConfiguration} of application.
+     *
+     * @return {@link PropertiesConfiguration} object.
+     * @throws AppConfigException
+     */
+    public static synchronized PropertiesConfiguration getPropertiesConfiguration() throws AppConfigException {
+        if (propertiesConfiguration == null) {
+            try {
+                String configFile = getLocation(CONF_PATH) + "/" + CONF_FILE;
 
-				propertiesConfiguration.load(configFile);
-			} catch (MalformedURLException | UnsupportedEncodingException | ConfigurationException e) {
-				throw new AppConfigException("Can not load app configuration file.", e);
-			}
-		}
+                propertiesConfiguration = new PropertiesConfiguration();
+                // auto reload config when content is changed
+                propertiesConfiguration.setReloadingStrategy(new FileChangedReloadingStrategy());
 
-		return propertiesConfiguration;
-	}
+                propertiesConfiguration.load(configFile);
+            } catch (MalformedURLException | UnsupportedEncodingException | ConfigurationException e) {
+                throw new AppConfigException("Can not load app configuration file.", e);
+            }
+        }
 
-	/**
-	 * Get BoneCP configuration properties.
-	 * 
-	 * @return
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	public static Properties getBoneCPConfigProperties() throws FileNotFoundException, IOException {
-		Properties prop = new Properties();
+        return propertiesConfiguration;
+    }
 
-		String boneCPConfigFile = getLocation(CONF_PATH) + "/" + BONECP_CONF_FILE;
+    /**
+     * Get BoneCP configuration properties.
+     *
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public static Properties getBoneCPConfigProperties() throws FileNotFoundException, IOException {
+        Properties prop = new Properties();
 
-		prop.load(new FileInputStream(boneCPConfigFile));
+        String boneCPConfigFile = getLocation(CONF_PATH) + "/" + BONECP_CONF_FILE;
 
-		return prop;
-	}
+        prop.load(new FileInputStream(boneCPConfigFile));
 
-	/**
-	 * Get actual path at runtime.
-	 * 
-	 * @return Location.
-	 * @throws MalformedURLException
-	 * @throws UnsupportedEncodingException
-	 */
-	public static String getLocation(String location) throws MalformedURLException, UnsupportedEncodingException {
-		String result = "";
+        return prop;
+    }
 
-		CodeSource src = AppConfig.class.getProtectionDomain().getCodeSource();
+    /**
+     * Get actual path at runtime.
+     *
+     * @return Location.
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
+    public static String getLocation(String location) throws MalformedURLException, UnsupportedEncodingException {
+        String result = "";
 
-		URL url = new URL(src.getLocation(), location);
-		result = URLDecoder.decode(url.getPath(), "utf-8");
+        CodeSource src = AppConfig.class.getProtectionDomain().getCodeSource();
 
-		return result;
-	}
+        URL url = new URL(src.getLocation(), location);
+        result = URLDecoder.decode(url.getPath(), "utf-8");
+
+        return result;
+    }
 }
