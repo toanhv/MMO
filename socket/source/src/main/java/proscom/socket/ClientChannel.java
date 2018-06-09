@@ -81,32 +81,32 @@ public class ClientChannel implements Runnable {
                 }
 
                 // send data to client
-                if (MessageHandler.channels != null && !MessageHandler.channels.isEmpty()) {
-                    // send data_client
-                    List<DataClient> messageList = DbUtil.getClientMessage(null);
-                    if (messageList != null && messageList.size() > 0) {
-                        for (DataClient item : messageList) {
-                            if (item.data != null) {
-                                channel = MessageHandler.channels.get(item.module_id);
-                                String ie_name = "";
-                                try {
-                                    ie_name = AppEnv.MESSAGE_NAME.get(item.ie_name.substring(1));
-                                } catch (Exception e) {
-                                }
-                                if (channel != null) {
-                                    channel.write(ChannelBuffers.wrappedBuffer(item.data.getBytes()));
-                                    logger.info("[sent to client] module_id: {}, ie: {} - {}, data: {}", item.module_id, item.ie_name, ie_name, item.data);
-                                    DbUtil.updateDataClientStatus(item.data_client_id, DataClientStatus.SENT.getValue());
-                                    DbUtil.updateModuleStatus(item.module_id, DataClientStatus.SENT.getValue());
-                                } else {
-                                    logger.info("[failed] sent to client, module_id: {}, ie: {} - {}, data: {}", item.module_id, item.ie_name, ie_name, item.data);
-                                    DbUtil.updateDataClientStatus(item.data_client_id, DataClientStatus.CONNECTION_ERROR.getValue());
-                                    DbUtil.updateModuleStatus(item.module_id, DataClientStatus.CONNECTION_ERROR.getValue());
-                                }
+                //if (MessageHandler.channels != null && !MessageHandler.channels.isEmpty()) {
+                // send data_client
+                List<DataClient> messageList = DbUtil.getClientMessage(null);
+                if (messageList != null && messageList.size() > 0) {
+                    for (DataClient item : messageList) {
+                        if (item.data != null) {
+                            channel = MessageHandler.channels.get(item.module_id);
+                            String ie_name = "";
+                            try {
+                                ie_name = AppEnv.MESSAGE_NAME.get(item.ie_name.substring(1));
+                            } catch (Exception e) {
+                            }
+                            if (channel != null) {
+                                channel.write(ChannelBuffers.wrappedBuffer(item.data.getBytes()));
+                                logger.info("[sent to client] module_id: {}, ie: {} - {}, data: {}", item.module_id, item.ie_name, ie_name, item.data);
+                                DbUtil.updateDataClientStatus(item.data_client_id, DataClientStatus.SENT.getValue());
+                                DbUtil.updateModuleStatus(item.module_id, DataClientStatus.SENT.getValue());
+                            } else {
+                                logger.info("[failed] sent to client, module_id: {}, ie: {} - {}, data: {}", item.module_id, item.ie_name, ie_name, item.data);
+                                DbUtil.updateDataClientStatus(item.data_client_id, DataClientStatus.CONNECTION_ERROR.getValue());
+                                DbUtil.updateModuleStatus(item.module_id, DataClientStatus.CONNECTION_ERROR.getValue());
                             }
                         }
                     }
                 }
+                //}
             } catch (Exception e) {
                 logger.error("send data client error", e);
             } finally {
