@@ -512,8 +512,21 @@ public class DbUtil {
             preparedStatement.setString(13, sensor.ie.reserved);
 
             preparedStatement.executeUpdate();
+            overTank(moduleId, Integer.parseInt(sensor.cam_bien_muc_nuoc_bon_solar, 2));
         } catch (NullPointerException | SQLException e) {
             logger.error("insertSensor() error, sensor: {}", sensor, e);
+        }
+    }
+
+    public static void overTank(int moduleId, int overTank) {
+        String updateQuery = "UPDATE modules SET over_tank=" + overTank + " WHERE id = " + moduleId;
+
+        try (Connection connection = connectionPool.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);) {
+            preparedStatement.setQueryTimeout(queryTimeout);
+
+            preparedStatement.executeUpdate();
+        } catch (NullPointerException | SQLException e) {
+            logger.error("overTank({}) error", moduleId, e);
         }
     }
 
@@ -569,7 +582,6 @@ public class DbUtil {
      * @param status
      */
     public static void updateDataClientStatus(int id, int status) {
-
         String updateQuery = "UPDATE data_client SET updated_at=current_timestamp, status=" + status + " WHERE id = " + id;
 
         try (Connection connection = connectionPool.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);) {
