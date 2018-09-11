@@ -512,15 +512,14 @@ public class DbUtil {
             preparedStatement.setString(13, sensor.ie.reserved);
 
             preparedStatement.executeUpdate();
-            overTank(moduleId, Integer.parseInt(sensor.cam_bien_muc_nuoc_bon_solar));
-            logger.info("moduleId > cam_bien_muc_nuoc_bon_solar: " + Integer.parseInt(sensor.cam_bien_muc_nuoc_bon_solar));
+            overTank(moduleId, Integer.parseInt(sensor.cam_bien_muc_nuoc_bon_solar, 2));
         } catch (NullPointerException | SQLException e) {
             logger.error("insertSensor() error, sensor: {}", sensor, e);
         }
     }
 
-    public static void overTank(int moduleId, int water_level) {
-        String updateQuery = "UPDATE modules SET over_tank=" + water_level + " WHERE id = " + moduleId;
+    public static void overTank(int moduleId, int overTank) {
+        String updateQuery = "UPDATE modules SET over_tank=" + overTank + " WHERE id = " + moduleId;
 
         try (Connection connection = connectionPool.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);) {
             preparedStatement.setQueryTimeout(queryTimeout);
@@ -583,7 +582,6 @@ public class DbUtil {
      * @param status
      */
     public static void updateDataClientStatus(int id, int status) {
-
         String updateQuery = "UPDATE data_client SET updated_at=current_timestamp, status=" + status + " WHERE id = " + id;
 
         try (Connection connection = connectionPool.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);) {
@@ -601,7 +599,7 @@ public class DbUtil {
      * @param id
      * @param status
      */
-    public static void updateModuleOnOff(int id, int status) {
+    public static void updateModuleStatus(int id, int status) {
 
         String updateQuery = "UPDATE modules SET updated_at=current_timestamp, status=" + status + " WHERE id = " + id;
 
@@ -610,7 +608,7 @@ public class DbUtil {
 
             preparedStatement.executeUpdate();
         } catch (NullPointerException | SQLException e) {
-            logger.error("updateModuleOnOff({}) error", id, e);
+            logger.error("updateModuleStatus({}) error", id, e);
         }
     }
 
@@ -668,17 +666,17 @@ public class DbUtil {
      * @param alarm
      */
     public static void updateModuleAlarm(IDModule idModule, Alarm alarm) {
-
-        String mSQL = "UPDATE modules SET alarm=? WHERE id=?";
+        String mSQL = "UPDATE modules SET alarm=?,over_head=?,over_pressure=?,lost_supply=? WHERE id=?";
         int moduleId = getModuleId(idModule.customerCode);
 
         try (Connection connection = connectionPool.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(mSQL);) {
             preparedStatement.setQueryTimeout(queryTimeout);
 
             preparedStatement.setString(1, alarm.qua_nhiet + alarm.qua_ap_suat + alarm.mat_dien + alarm.tran_be);
-            preparedStatement.setInt(2, moduleId);
-
-            preparedStatement.setQueryTimeout(queryTimeout);
+            preparedStatement.setInt(2, alarm.qua_nhiet == "11" ? 1 : 0);
+            preparedStatement.setInt(3, alarm.qua_ap_suat == "11" ? 1 : 0);
+            preparedStatement.setInt(4, alarm.mat_dien == "11" ? 1 : 0);
+            preparedStatement.setInt(5, moduleId);
 
             preparedStatement.executeUpdate();
         } catch (NullPointerException | SQLException e) {
