@@ -666,17 +666,17 @@ public class DbUtil {
      * @param alarm
      */
     public static void updateModuleAlarm(IDModule idModule, Alarm alarm) {
-
-        String mSQL = "UPDATE modules SET alarm=? WHERE id=?";
+        String mSQL = "UPDATE modules SET alarm=?,over_head=?,over_pressure=?,lost_supply=? WHERE id=?";
         int moduleId = getModuleId(idModule.customerCode);
 
         try (Connection connection = connectionPool.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(mSQL);) {
             preparedStatement.setQueryTimeout(queryTimeout);
 
             preparedStatement.setString(1, alarm.qua_nhiet + alarm.qua_ap_suat + alarm.mat_dien + alarm.tran_be);
-            preparedStatement.setInt(2, moduleId);
-
-            preparedStatement.setQueryTimeout(queryTimeout);
+            preparedStatement.setInt(2, alarm.qua_nhiet == "11" ? 1 : 0);
+            preparedStatement.setInt(3, alarm.qua_ap_suat == "11" ? 1 : 0);
+            preparedStatement.setInt(4, alarm.mat_dien == "11" ? 1 : 0);
+            preparedStatement.setInt(5, moduleId);
 
             preparedStatement.executeUpdate();
         } catch (NullPointerException | SQLException e) {
