@@ -32,13 +32,18 @@ function try_roll(){
         else if(parseInt(myRP[0].innerText.replace(/,/g, '')) >= 12)
 			RedeemRPProduct('free_points_1');
     }
-    if(z==null && parseInt(myRP[0].innerText.replace(/,/g, '')) >= 4400){
-		RedeemRPProduct('fp_bonus_1000');
+    if(z==null && (parseInt(myRP[0].innerText.replace(/,/g, ''))) >= 4400) {
+		RedeemRPProduct('free_lott_100');		
+		if (parseInt(myRP[0].innerText.replace(/,/g, '')) >= 4400) {
+			RedeemRPProduct('fp_bonus_1000');
+		}
+    } else if(z==null && parseInt(myRP[0].innerText.replace(/,/g, '')) >= 3000) {
+		RedeemRPProduct('free_lott_100');	
+		if (parseInt(myRP[0].innerText.replace(/,/g, '')) >= 2400) {
+			RedeemRPProduct('fp_bonus_500');
+		}
     }
-	if(z==null && parseInt(myRP[0].innerText.replace(/,/g, '')) >= 3000){
-		RedeemRPProduct('fp_bonus_500');
-    }
-    if(x && x.style["display"] != "none"){
+    if(x && x.style["display"] != "none") {
         setTimeout(function(){
             x.click();
         }, 3000); 

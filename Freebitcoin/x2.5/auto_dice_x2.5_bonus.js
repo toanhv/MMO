@@ -16,7 +16,7 @@ var countWin = 4;
 $('#double_your_btc_min').click();
 var startStake = 0.00000002;//$('#double_your_btc_stake').val();
 var stake = 30;
-var interest = 10; //%
+var interest = 50; //%
 var confirmStop = false;
 var xConfirm = 20;
 
@@ -115,7 +115,7 @@ rollDice = function() {
 		if($('#double_your_btc_bet_lose').html().indexOf('lose') != -1) {
 			if (loseCount >= countLose && xLose > (Number(countLose) + 4)) {
 				if (x > startStake) {
-					x = x * 1.8;
+					x = x * 2;
 				} else {
 					x = stake * startStake;
 				}	

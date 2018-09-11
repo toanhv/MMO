@@ -33,6 +33,7 @@ import proscom.domain.Sensor;
 import proscom.domain.Sim;
 import proscom.domain.SystemMode;
 import proscom.domain.TimerCounter;
+import proscom.enums.DataClientStatus;
 import proscom.enums.ImsiStatus;
 import proscom.exception.AppConfigException;
 import proscom.util.ChannelBufferHelper;
@@ -319,11 +320,13 @@ public class MessageDecoder extends FrameDecoder {
             DbUtil.insertRawData("", msg);
 
             logger.error("Error when decode message {}", msg, e);
+            logger.error("message {}", message.toString(), e);
             message = null;
         }
 
         if (message != null && message.customerCode != null && !message.customerCode.equals("")) {
             message.module_id = DbUtil.getModuleId(message.customerCode);
+            DbUtil.updateModuleOnOff(message.module_id, DataClientStatus.CLIENT_CONFIRM_OK.getValue());
         }
 
         return message;

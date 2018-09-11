@@ -110,7 +110,7 @@ public class MessageHandler extends SimpleChannelHandler {
             int dataClientId = DbUtil.getLastDataClientIdByIeName(message.module_id, AppEnv.DOWNLINK + message.code);
             if (dataClientId != 0) {
                 DbUtil.updateDataClientStatus(dataClientId, DataClientStatus.CLIENT_CONFIRM_OK.getValue());
-                DbUtil.updateModuleStatus(message.module_id, DataClientStatus.CLIENT_CONFIRM_OK.getValue());
+                DbUtil.updateModuleOnOff(message.module_id, DataClientStatus.CLIENT_CONFIRM_OK.getValue());
             }
 
             // insert into operation_log
