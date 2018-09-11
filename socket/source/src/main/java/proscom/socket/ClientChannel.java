@@ -97,11 +97,11 @@ public class ClientChannel implements Runnable {
                                 channel.write(ChannelBuffers.wrappedBuffer(item.data.getBytes()));
                                 logger.info("[sent to client] module_id: {}, ie: {} - {}, data: {}", item.module_id, item.ie_name, ie_name, item.data);
                                 DbUtil.updateDataClientStatus(item.data_client_id, DataClientStatus.SENT.getValue());
-                                DbUtil.updateModuleOnOff(item.module_id, DataClientStatus.SENT.getValue());
+                                DbUtil.updateModuleStatus(item.module_id, DataClientStatus.SENT.getValue());
                             } else {
                                 logger.info("[failed] sent to client, module_id: {}, ie: {} - {}, data: {}", item.module_id, item.ie_name, ie_name, item.data);
                                 DbUtil.updateDataClientStatus(item.data_client_id, DataClientStatus.CONNECTION_ERROR.getValue());
-                                DbUtil.updateModuleOnOff(item.module_id, DataClientStatus.CONNECTION_ERROR.getValue());
+                                DbUtil.updateModuleStatus(item.module_id, DataClientStatus.CONNECTION_ERROR.getValue());
                             }
                         }
                     }

@@ -315,7 +315,6 @@ public class MessageDecoder extends FrameDecoder {
                 }
             }
         } catch (Exception e) {
-
             String msg = new String(rawMessage.array());
             DbUtil.insertRawData("", msg);
 
@@ -326,7 +325,7 @@ public class MessageDecoder extends FrameDecoder {
 
         if (message != null && message.customerCode != null && !message.customerCode.equals("")) {
             message.module_id = DbUtil.getModuleId(message.customerCode);
-            DbUtil.updateModuleOnOff(message.module_id, DataClientStatus.CLIENT_CONFIRM_OK.getValue());
+            DbUtil.updateModuleStatus(message.module_id, DataClientStatus.CLIENT_CONFIRM_OK.getValue());
         }
 
         return message;

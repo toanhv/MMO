@@ -110,14 +110,12 @@ public class MessageHandler extends SimpleChannelHandler {
             int dataClientId = DbUtil.getLastDataClientIdByIeName(message.module_id, AppEnv.DOWNLINK + message.code);
             if (dataClientId != 0) {
                 DbUtil.updateDataClientStatus(dataClientId, DataClientStatus.CLIENT_CONFIRM_OK.getValue());
-                DbUtil.updateModuleOnOff(message.module_id, DataClientStatus.CLIENT_CONFIRM_OK.getValue());
+                DbUtil.updateModuleStatus(message.module_id, DataClientStatus.CLIENT_CONFIRM_OK.getValue());
             }
 
             // insert into operation_log
             if (AppEnv.MESSAGE_NAME.containsKey(message.code)) {
-
                 String messageContent = AppEnv.MESSAGE_NAME.get(message.code) + " message, sent by Module";
-
                 DbUtil.insertOperationLog(message.customerCode, messageContent);
             }
         }
@@ -125,15 +123,10 @@ public class MessageHandler extends SimpleChannelHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-
         logger.error("Channel Exception", e.getCause());
-
         Channel ch = e.getChannel();
-
         removeChannel(ch);
-
         ch.close();
-
         logger.info("Channel {} is closed, channels: {}", ch.getId(), channels.size());
     }
 
@@ -143,9 +136,7 @@ public class MessageHandler extends SimpleChannelHandler {
      * @param channel
      */
     private void removeChannel(Channel channel) {
-
         if (channels.containsValue(channel)) {
-
             for (Entry<Integer, Channel> entry : channels.entrySet()) {
                 if (entry.getValue().equals(channel)) {
                     channels.remove(entry.getKey());
@@ -155,7 +146,6 @@ public class MessageHandler extends SimpleChannelHandler {
         }
 
         if (channelAssignment.containsValue(channel)) {
-
             for (Entry<String, Channel> entry : channelAssignment.entrySet()) {
                 if (entry.getValue().equals(channel)) {
                     channelAssignment.remove(entry.getKey());
