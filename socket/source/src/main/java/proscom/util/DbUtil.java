@@ -673,9 +673,9 @@ public class DbUtil {
             preparedStatement.setQueryTimeout(queryTimeout);
 
             preparedStatement.setString(1, alarm.qua_nhiet + alarm.qua_ap_suat + alarm.mat_dien + alarm.tran_be);
-            preparedStatement.setInt(2, alarm.qua_nhiet == "11" ? 1 : 0);
-            preparedStatement.setInt(3, alarm.qua_ap_suat == "11" ? 1 : 0);
-            preparedStatement.setInt(4, alarm.mat_dien == "11" ? 1 : 0);
+            preparedStatement.setInt(2, alarm.qua_nhiet.equals("11") ? 1 : 0);
+            preparedStatement.setInt(3, alarm.qua_ap_suat.equals("11") ? 1 : 0);
+            preparedStatement.setInt(4, alarm.mat_dien.equals("11") ? 1 : 0);
             preparedStatement.setInt(5, moduleId);
 
             preparedStatement.executeUpdate();
